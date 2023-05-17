@@ -2,6 +2,7 @@ package htwberlin.webtech.web;
 
 import htwberlin.webtech.web.api.Items;
 import htwberlin.webtech.web.service.ItemsService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,11 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroceryListRestController {
     ItemsService itemsService;
 
+   public GroceryListRestController(ItemsService itemsService) {
+        this.itemsService = itemsService;
+    }
 
     @PostMapping("/api/grocery-lists")
     public Items createItems(@RequestBody Items items) {
-        return itemsService.save(items);
+        return itemsService.createItem(items);
 
+    }
+   @GetMapping("/api/grocery-lists")
+    public Iterable<Items> getItems(Long itemsId) {
+        return itemsService.getItems(itemsId);
     }
 
 }

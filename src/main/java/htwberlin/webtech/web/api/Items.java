@@ -1,9 +1,7 @@
 package htwberlin.webtech.web.api;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 
 @Entity
 public class Items {
@@ -12,14 +10,18 @@ public class Items {
     private Long id;
     private String name;
     private String category;
+    @ManyToOne
+    @JoinColumn(name = "grocery_list_id")
+    private GroceryList groceryList;
 
-    public Items(Long id, String name, String category) {
+    public Items(Long id, String name, String category, GroceryList groceryList) {
         this.id = id;
         this.name = name;
         this.category = category;
+        this.groceryList = groceryList;
     }
 
-    public Items() {
+    protected Items() {
     }
 
     public Long getId() {
@@ -44,5 +46,13 @@ public class Items {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public GroceryList getGroceryList() {
+        return groceryList;
+    }
+
+    public void setGroceryList(GroceryList groceryList) {
+        this.groceryList = groceryList;
     }
 }

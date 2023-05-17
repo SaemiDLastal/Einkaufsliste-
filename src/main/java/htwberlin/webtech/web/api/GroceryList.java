@@ -1,14 +1,26 @@
 package htwberlin.webtech.web.api;
 
-public class GroceryList {
+import jakarta.persistence.*;
 
+import java.util.List;
+
+@Entity
+public class GroceryList {
+        @Id
+        @GeneratedValue(strategy= GenerationType.IDENTITY)
         private Long id;
 
         private String title;
+        @OneToMany(mappedBy = "groceryList", cascade = CascadeType.ALL)
+        private List<Items> items;
 
-        public GroceryList(Long id, String title) {
+
+
+
+        public GroceryList(Long id, String title, List<Items> items) {
             this.id = id;
             this.title = title;
+            this.items = items;
         }
 
         public GroceryList() {
@@ -30,4 +42,12 @@ public class GroceryList {
         public void setTitle(String title) {
         this.title = title;
     }
+
+        public List<Items> getItems() {
+            return items;
+        }
+
+        public void setItems(List<Items> items) {
+            this.items = items;
+        }
 }
