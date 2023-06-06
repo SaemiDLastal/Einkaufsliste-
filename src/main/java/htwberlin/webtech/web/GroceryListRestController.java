@@ -1,28 +1,23 @@
 package htwberlin.webtech.web;
 
-import htwberlin.webtech.web.api.Items;
-import htwberlin.webtech.web.service.ItemsService;
-import org.springframework.web.bind.annotation.GetMapping;
+import htwberlin.webtech.web.api.GroceryList;
+import htwberlin.webtech.web.service.GroceryListService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GroceryListRestController {
-    ItemsService itemsService;
 
-   public GroceryListRestController(ItemsService itemsService) {
-        this.itemsService = itemsService;
+    @Autowired
+    GroceryListService groceryListService;
+
+    public GroceryListRestController(GroceryListService groceryListService) {
+        this.groceryListService = groceryListService;
     }
 
-    @PostMapping("/api/grocery-lists")
-    public Items createItems(@RequestBody Items items) {
-        return itemsService.createItem(items);
-
-    }
-   @GetMapping("/api/grocery-lists")
-    public Iterable<Items> getItems(Long itemsId) {
-        return itemsService.getItems(itemsId);
-    }
+    @PostMapping("/api/groceryList")
+    public GroceryList createGroceryList(@RequestBody GroceryList groceryList) { return groceryListService.createGroceryList(groceryList);}
 
 }

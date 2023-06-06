@@ -2,6 +2,7 @@ package htwberlin.webtech.web.api;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,21 +12,19 @@ public class GroceryList {
         private Long id;
 
         private String title;
-        @OneToMany(mappedBy = "groceryList", cascade = CascadeType.ALL)
-        private List<Items> items;
+        @OneToMany(cascade = CascadeType.ALL)
+        private ArrayList<Item> items;
 
 
-
-
-        public GroceryList(Long id, String title, List<Items> items) {
+        public GroceryList(Long id, String title, ArrayList<Item> items) {
             this.id = id;
             this.title = title;
             this.items = items;
         }
 
-        public GroceryList() {
+    public GroceryList() {
 
-        }
+    }
 
         public Long getId() {
         return id;
@@ -43,11 +42,11 @@ public class GroceryList {
         this.title = title;
     }
 
-        public List<Items> getItems() {
+        public ArrayList<Item> getItems() {
             return items;
         }
 
-        public void setItems(List<Items> items) {
+        public void setItems(ArrayList<Item> items) {
             this.items = items;
         }
 }

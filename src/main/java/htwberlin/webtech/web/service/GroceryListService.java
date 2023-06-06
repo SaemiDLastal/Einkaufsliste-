@@ -3,11 +3,15 @@ package htwberlin.webtech.web.service;
 import htwberlin.webtech.web.api.GroceryList;
 import htwberlin.webtech.web.presistance.GroceryListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class GroceryListService {
 
     @Autowired
     GroceryListRepository groceryListRepository;
+
+
 
     public GroceryList createGroceryList(GroceryList groceryList) {
         return groceryListRepository.save(groceryList);
