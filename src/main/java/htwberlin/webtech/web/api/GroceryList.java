@@ -12,14 +12,18 @@ public class GroceryList {
         private Long id;
 
         private String title;
-        @OneToMany(cascade = CascadeType.ALL)
-        private ArrayList<Item> items;
+        @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        @JoinTable(
+                name = "groceryList_item",
+                joinColumns = @JoinColumn(name = "groceryList_id"),
+                inverseJoinColumns = @JoinColumn(name = "item_id"))
+        private List<Item> itemList= new ArrayList<>();
 
 
-        public GroceryList(Long id, String title, ArrayList<Item> items) {
+        public GroceryList(Long id, String title, List<Item> itemList) {
             this.id = id;
             this.title = title;
-            this.items = items;
+            this.itemList = itemList;
         }
 
     public GroceryList() {
@@ -42,11 +46,31 @@ public class GroceryList {
         this.title = title;
     }
 
-        public ArrayList<Item> getItems() {
-            return items;
+        public List<Item> getItemList() {
+            return itemList;
         }
 
-        public void setItems(ArrayList<Item> items) {
-            this.items = items;
+        public void setItemList(List<Item> item) {
+            this.itemList = item;
         }
+
+    @Override
+    public String toString() {
+        return "GroceryList{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", itemList=" + itemList.get(0).getName() +
+                '}';
+    }
+
+    public void addItem(Item item) {
+            itemList.add(item);
+            //item.getGroceryList().add(this);
+        }
+
+
+
+
+
+
 }

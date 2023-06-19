@@ -1,6 +1,9 @@
 package htwberlin.webtech.web.api;
 
-import jakarta.persistence.*;
+        import jakarta.persistence.*;
+
+        import java.util.ArrayList;
+        import java.util.List;
 
 
 @Entity
@@ -11,20 +14,12 @@ public class Item {
     private String name;
     private String category;
 
-    @ManyToOne
-    @JoinColumn(name = "grocerylist_id", nullable = false)
-    private GroceryList groceryList;
+    @ManyToMany(mappedBy = "itemList", cascade = CascadeType.ALL)
+    private List<GroceryList> groceryList= new ArrayList<>();
 
 
-    public void setGroceryList(GroceryList groceryList) {
-        this.groceryList = groceryList;
-    }
 
-    public GroceryList getGroceryList() {
-        return groceryList;
-    }
-
-    public Item(Long id, String name, String category, GroceryList groceryList) {
+    public Item(Long id, String name, String category,List<GroceryList> groceryList) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -56,6 +51,25 @@ public class Item {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public void setGroceryList(List<GroceryList> groceryLists) {
+        this.groceryList = groceryLists;
+    }
+
+    public List<GroceryList> getGroceryList() {
+        return groceryList;
+    }
+
+
+    public void add(GroceryList groceryList) {
+
+    }
+
+
+
+    public Item get(int i) {
+        return null;
     }
 
 }
