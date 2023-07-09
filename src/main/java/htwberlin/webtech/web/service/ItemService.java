@@ -10,9 +10,6 @@ public class ItemService {
     @Autowired
     ItemsRepository itemsRepository;
 
-    public ItemService(ItemsRepository itemsRepository) {
-        this.itemsRepository = itemsRepository;
-    }
 
     public Item getItems(Long itemsId) {
         return itemsRepository.findById(itemsId).orElseThrow(() -> new RuntimeException("Item-ID not found: "+ itemsId));
@@ -29,10 +26,9 @@ public class ItemService {
         return itemsRepository.save(itemToUpdate);
     }
 
-    public Item deleteItem(Long itemId) {
+    public void deleteItem(Long itemId) {
         Item item = itemsRepository.findById(itemId).orElseThrow(() -> new RuntimeException("Item-ID not found: "+ itemId));
         itemsRepository.deleteById(itemId);
-        return item;
     }
 
 

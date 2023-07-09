@@ -7,8 +7,8 @@ import htwberlin.webtech.web.presistance.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GroceryListService {
@@ -20,7 +20,6 @@ public class GroceryListService {
     ItemsRepository itemsRepository;
 
     public GroceryList createGroceryList(GroceryList groceryList) {
-
         return groceryListRepository.save(groceryList);
     }
 
@@ -32,36 +31,51 @@ public class GroceryListService {
         return groceryListRepository.findById(id).orElse(null);
     }
 
-    public GroceryList updateGroceryList(GroceryList groceryList) {
+    public GroceryList updateGroceryList(Long groceryListId,GroceryList groceryList) {
+        GroceryList existingGroceryList= groceryListRepository.findById(groceryListId).orElse(null);
+        if (existingGroceryList == null) {
+            throw new RuntimeException("GroceryList not found" + groceryListId );
+        }
+        existingGroceryList.setTitle(groceryList.getTitle());
+        existingGroceryList.setItemList(groceryList.getItemList());
 
-        return groceryListRepository.save(groceryList);
+        return groceryListRepository.save(existingGroceryList);
     }
 
     public void deleteGroceryList(Long id) {
         groceryListRepository.deleteById(id);
     }
 
-    public GroceryList getGroceryListById(Long id) {
-        return groceryListRepository.findById(id).orElse(null);
+    public void deleteItemFromGroceryList(Long groceryListId, Long itemId) {
+        GroceryList groceryList = groceryListRepository.findById(groceryListId).orElse(null);
+        if (groceryList == null) {
+            throw new RuntimeException("GroceryList not found: " + groceryListId);
+        }
+        Item item = itemsRepository.findById(itemId).orElse(null);
+        if (item == null) {
+            throw new RuntimeException("Item not found: " + itemId);
+        }
+        List<Item> itemList = groceryList.getItemList();
+        itemList.remove(item);
+        groceryList.setItemList(itemList);
+        groceryListRepository.save(groceryList);
     }
 
    public GroceryList addItemToGroceryList(Long groceryListId, Item item) {
-        /*Optional<GroceryList> optionalGroceryList = groceryListRepository.findById(groceryListId);
-        if (optionalGroceryList.isPresent()) {
-            GroceryList groceryList = optionalGroceryList.get();
-            groceryList.addItem(item);
-            groceryListRepository.save(groceryList);
-            return groceryList;
-        } else {
-            throw new RuntimeException("GroceryList not found: " + groceryListId);
-        }*/
-       Optional<GroceryList> groceryList = groceryListRepository.findById(groceryListId);
-       GroceryList groceryList1 = groceryList.get();
-         groceryList1.addItem(item);
-       System.out.println(groceryList1.toString());
-             return groceryListRepository.save(groceryList1);
+         GroceryList groceryList = groceryListRepository.findById(groceryListId).orElse(null);
+            if (groceryList == null) {
+                throw new RuntimeException("GroceryList not found: " + groceryListId);
+            }
+            Item existingItem = itemsRepository.findByName(item.getName());
+            if( existingItem != null && existingItem.getName().equals(item.getName())){
+                groceryList.addItem(existingItem);
+            }else {
+                groceryList.addItem(item);
+            }
 
+          groceryListRepository.save(groceryList);
 
+          return groceryList;
     }
 
 

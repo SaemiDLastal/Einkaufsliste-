@@ -7,8 +7,11 @@ import htwberlin.webtech.web.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
+
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class GroceryListRestController {
     @Autowired
     GroceryListService groceryListService;
@@ -18,18 +21,26 @@ public class GroceryListRestController {
 
     @PostMapping("/api/groceryList")
     public GroceryList createGroceryList(@RequestBody GroceryList groceryList) {
+
         return groceryListService.createGroceryList(groceryList);
     }
 
+
+    @GetMapping("/api/groceryList/{id}")
+    public GroceryList findGroceryListById(@PathVariable Long id) {
+        return groceryListService.findGroceryListById(id);
+    }
+
+    @GetMapping("/api/groceryList")
+    public Iterable<GroceryList> getAllGroceryLists() {
+        return groceryListService.getAllGroceryLists();
+    }
+
+
     @PutMapping("/api/groceryList/{id}")
     public GroceryList updateGroceryList(@PathVariable Long id, @RequestBody GroceryList groceryList) {
-        GroceryList existingGroceryList = groceryListService.getGroceryListById(id);
-        if (existingGroceryList == null) {
-            throw new RuntimeException("GroceryList not found" + id );
-        }
-        existingGroceryList.setTitle(groceryList.getTitle());
 
-        return groceryListService.updateGroceryList(existingGroceryList);
+        return groceryListService.updateGroceryList(id,groceryList);
     }
 
     @DeleteMapping("api/groceryList/{id}")
@@ -39,26 +50,18 @@ public class GroceryListRestController {
 
     @PutMapping("/api/groceryList/{groceryListId}/item")
     public GroceryList addItemToGroceryList(@PathVariable Long groceryListId, @RequestBody Item item) {
-
         return groceryListService.addItemToGroceryList(groceryListId, item);
     }
-
-    @DeleteMapping("/api/{groceryListId}/item")
-    public GroceryList removeItemFromGroceryList( Long groceryListId, @RequestBody Item item) {
-        GroceryList groceryList = groceryListService.getGroceryListById(groceryListId);
-        if (groceryList == null) {
-            throw new RuntimeException("GroceryList not found: " + groceryListId);
-        }
-        Item savedItem = itemService.createItem(item);
-
-        return groceryListService.updateGroceryList(groceryList);
+    @DeleteMapping("/api/groceryList/{groceryListId}/item/{itemId}")
+    public void deleteItemFromGroceryList(@PathVariable Long groceryListId, @PathVariable Long itemId) {
+        groceryListService.deleteItemFromGroceryList(groceryListId, itemId);
     }
     @PostMapping("/api/item")
     public Item createItem(@RequestBody Item item) {
         return itemService.createItem(item);
     }
     @DeleteMapping("/api/item/{id}")
-    public void deleteItem(Long id) {
+    public void deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
     }
 

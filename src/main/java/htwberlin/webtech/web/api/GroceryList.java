@@ -1,5 +1,7 @@
 package htwberlin.webtech.web.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -12,11 +14,8 @@ public class GroceryList {
         private Long id;
 
         private String title;
+        //@JsonIgnore
         @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-        @JoinTable(
-                name = "groceryList_item",
-                joinColumns = @JoinColumn(name = "groceryList_id"),
-                inverseJoinColumns = @JoinColumn(name = "item_id"))
         private List<Item> itemList= new ArrayList<>();
 
 
@@ -65,12 +64,7 @@ public class GroceryList {
 
     public void addItem(Item item) {
             itemList.add(item);
-            //item.getGroceryList().add(this);
         }
-
-
-
-
 
 
 }
